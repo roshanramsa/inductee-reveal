@@ -36,21 +36,21 @@ const LEVELS: LevelConfig[] = [
         ],
         ballStart: { x: 30, y: 300 }, exitCheckX: 782,
     },
-    // Level 2 — tighter corridors (50 px)
+    // Level 2 — medium corridors (70 px), corridors repositioned so walls are ≥ 90 px thick
     {
         id: 2, title: "LEVEL 2", subtitle: "ENTANGLEMENT", pathColor: "#e6ddd2",
         corridors: [
-            { x: 0, y: 275, w: 110, h: 50 }, // entry →
-            { x: 60, y: 60, w: 50, h: 265 }, // up │
-            { x: 60, y: 60, w: 360, h: 50 }, // right along top →
-            { x: 370, y: 60, w: 50, h: 240 }, // down mid │
-            { x: 150, y: 250, w: 270, h: 50 }, // left ←
-            { x: 150, y: 250, w: 50, h: 190 }, // down │
-            { x: 150, y: 390, w: 460, h: 50 }, // right along bottom →
-            { x: 560, y: 150, w: 50, h: 290 }, // up right │
-            { x: 560, y: 150, w: 240, h: 50 }, // exit run →
+            { x: 0, y: 255, w: 120, h: 70 }, // entry →          (y 255–325)
+            { x: 70, y: 40, w: 70, h: 285 }, // up │             (x 70–140, y 40–325)
+            { x: 70, y: 40, w: 380, h: 70 }, // right along top → (y 40–110)
+            { x: 380, y: 40, w: 70, h: 200 }, // down mid │       (x 380–450, y 40–240)
+            { x: 160, y: 170, w: 290, h: 70 }, // left ←           (y 170–240)
+            { x: 160, y: 170, w: 70, h: 230 }, // down │           (x 160–230, y 170–400)
+            { x: 160, y: 330, w: 430, h: 70 }, // right along bottom → (y 330–400)
+            { x: 520, y: 130, w: 70, h: 270 }, // up right │       (x 520–590, y 130–400)
+            { x: 520, y: 130, w: 280, h: 70 }, // exit run →       (y 130–200)
         ],
-        ballStart: { x: 30, y: 300 }, exitCheckX: 782,
+        ballStart: { x: 30, y: 290 }, exitCheckX: 782,
     },
 ];
 
@@ -105,13 +105,14 @@ export default function ScaryMaze() {
     const countdownTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const punchImgRef = useRef<HTMLImageElement | null>(null);
     const monkeImgRef = useRef<HTMLImageElement | null>(null);
+    const rickVideoRef = useRef<HTMLVideoElement | null>(null);
     // For touch tracking
     const lastTouchRef = useRef<{ x: number; y: number } | null>(null);
 
     phaseRef.current = phase;
     currentLevelRef.current = currentLevel;
 
-    // Pre-load sprite images
+    // Pre-load sprite images + rick video
     useEffect(() => {
         const punch = new Image();
         punch.src = "/punch.jpg";
@@ -120,6 +121,15 @@ export default function ScaryMaze() {
         const monke = new Image();
         monke.src = "/monke.jpg";
         monkeImgRef.current = monke;
+
+        // Eagerly buffer the scare video so it plays instantly with no delay
+        const rick = document.createElement("video");
+        rick.src = "/rick.mp4";
+        rick.preload = "auto";
+        rick.muted = true;   // must be muted to allow silent preload without user gesture
+        rick.playsInline = true;
+        rick.load();
+        rickVideoRef.current = rick;
     }, []);
 
     // Detect touch on mount
@@ -577,9 +587,12 @@ export default function ScaryMaze() {
                     {scareVisible && (
                         <>
                             <video
+                                ref={rickVideoRef}
                                 src="/rick.mp4"
                                 autoPlay
+                                muted={false}
                                 playsInline
+                                preload="auto"
                                 className="w-full h-full object-cover select-none pointer-events-none animate-scare-in"
                             />
 
