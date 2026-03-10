@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
-/* ── Tailwind theme tokens (maps Geist fonts to Tailwind's font utilities) ── */
+/* ── Neue Montreal ─────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/NeueMontreal-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Tailwind theme tokens ────────────────────────────────────────────────── */
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: 'NeueMontreal', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
@@ -44,11 +53,11 @@ body {
 
   0%,
   100% {
-    text-shadow: 0 0 28px rgba(230, 57, 70, .4), 0 0 80px rgba(230, 57, 70, .18);
+    opacity: 1;
   }
 
   50% {
-    text-shadow: 0 0 50px rgba(230, 57, 70, .7), 0 0 120px rgba(230, 57, 70, .32);
+    opacity: 0.7;
   }
 }
 
