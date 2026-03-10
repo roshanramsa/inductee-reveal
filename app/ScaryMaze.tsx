@@ -72,6 +72,12 @@ function inCorridor(x: number, y: number, c: Rect[]): boolean {
     return c.some((r) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h);
 }
 
+/** Returns true if we're on a touch-primary device */
+function isTouchDevice(): boolean {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia("(pointer: coarse)").matches;
+}
+
 // ─── Component ───────────────────────────────────────────────────────────────
 export default function ScaryMaze() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -81,6 +87,7 @@ export default function ScaryMaze() {
     const [failCount, setFailCount] = useState(0);
     const [scareVisible, setScareVisible] = useState(false);
     const [countdown, setCountdown] = useState(3);
+    const [isTouch, setIsTouch] = useState(false);
 
     const phaseRef = useRef<Phase>("landing");
     const currentLevelRef = useRef(0);
@@ -89,9 +96,16 @@ export default function ScaryMaze() {
     const rippleRef = useRef<{ x: number; y: number; r: number; alpha: number }[]>([]);
     const audioCtxRef = useRef<AudioContext | null>(null);
     const countdownTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    // For touch tracking
+    const lastTouchRef = useRef<{ x: number; y: number } | null>(null);
 
     phaseRef.current = phase;
     currentLevelRef.current = currentLevel;
+
+    // Detect touch on mount
+    useEffect(() => {
+        setIsTouch(isTouchDevice());
+    }, []);
 
     // ── Audio ───────────────────────────────────────────────────────────────────
     const ensureAudio = useCallback(() => {
@@ -212,61 +226,69 @@ export default function ScaryMaze() {
                 clearInterval(countdownTimerRef.current!);
                 setPhase("playing");
                 phaseRef.current = "playing";
-                setTimeout(() => canvasRef.current?.requestPointerLock(), 60);
+                // Only request pointer lock on non-touch devices
+                if (!isTouchDevice()) {
+                    setTimeout(() => canvasRef.current?.requestPointerLock(), 60);
+                }
             } else {
                 setCountdown(n);
             }
         }, 1000);
     }, []);
 
-    // ── Pointer lock mouse delta tracking ──────────────────────────────────────
+    // ── Shared advance/fail logic ──────────────────────────────────────────────
+    const handleMove = useCallback((dx: number, dy: number) => {
+        if (phaseRef.current !== "playing") return;
+
+        const level = LEVELS[currentLevelRef.current];
+        const prev = ballPosRef.current;
+        const nx = Math.max(0, Math.min(CW, prev.x + dx));
+        const ny = Math.max(0, Math.min(CH, prev.y + dy));
+        ballPosRef.current = { x: nx, y: ny };
+
+        if (nx >= level.exitCheckX && inCorridor(nx, ny, level.corridors)) {
+            if (currentLevelRef.current >= LEVELS.length - 1) {
+                // Final level — exit lock and show jumpscare
+                document.exitPointerLock?.();
+                phaseRef.current = "scare";
+                setPhase("scare");
+                setTimeout(() => { setScareVisible(true); playScream(); }, 80);
+            } else {
+                // Seamless advance
+                const nextIdx = currentLevelRef.current + 1;
+                ballPosRef.current = { ...LEVELS[nextIdx].ballStart };
+                currentLevelRef.current = nextIdx;
+                setCurrentLevel(nextIdx);
+            }
+            return;
+        }
+
+        if (!inCorridor(nx, ny, level.corridors)) {
+            for (let i = 0; i < 3; i++)
+                rippleRef.current.push({ x: nx, y: ny, r: BALL_RADIUS + i * 4, alpha: 0.9 - i * 0.25 });
+            document.exitPointerLock?.();
+            phaseRef.current = "failed";
+            setPhase("failed");
+            setFailCount((c) => c + 1);
+        }
+    }, [playScream]);
+
+    // ── Pointer lock mouse delta tracking (desktop) ────────────────────────────
     useEffect(() => {
         const onMove = (e: MouseEvent) => {
             if (phaseRef.current !== "playing") return;
             if (document.pointerLockElement !== canvasRef.current) return;
-
-            const level = LEVELS[currentLevelRef.current];
-            const prev = ballPosRef.current;
-            const nx = Math.max(0, Math.min(CW, prev.x + e.movementX));
-            const ny = Math.max(0, Math.min(CH, prev.y + e.movementY));
-            ballPosRef.current = { x: nx, y: ny };
-
-            if (nx >= level.exitCheckX && inCorridor(nx, ny, level.corridors)) {
-                if (currentLevelRef.current >= LEVELS.length - 1) {
-                    // Final level — exit lock and show jumpscare
-                    document.exitPointerLock();
-                    phaseRef.current = "scare";
-                    setPhase("scare");
-                    setTimeout(() => { setScareVisible(true); playScream(); }, 80);
-                } else {
-                    // Seamless advance: keep pointer lock active, just swap level data
-                    const nextIdx = currentLevelRef.current + 1;
-                    ballPosRef.current = { ...LEVELS[nextIdx].ballStart };
-                    currentLevelRef.current = nextIdx;
-                    setCurrentLevel(nextIdx);
-                    // phase stays "playing", pointer lock stays active — mouse works immediately
-                }
-                return;
-            }
-
-            if (!inCorridor(nx, ny, level.corridors)) {
-                for (let i = 0; i < 3; i++)
-                    rippleRef.current.push({ x: nx, y: ny, r: BALL_RADIUS + i * 4, alpha: 0.9 - i * 0.25 });
-                document.exitPointerLock();
-                phaseRef.current = "failed";
-                setPhase("failed");
-                setFailCount((c) => c + 1);
-            }
+            handleMove(e.movementX, e.movementY);
         };
 
         document.addEventListener("mousemove", onMove);
         return () => document.removeEventListener("mousemove", onMove);
-    }, [playScream]);
+    }, [handleMove]);
 
-    // Escape / external pointer-lock loss
+    // Escape / external pointer-lock loss (desktop)
     useEffect(() => {
         const onLockChange = () => {
-            if (document.pointerLockElement === null && phaseRef.current === "playing") {
+            if (document.pointerLockElement === null && phaseRef.current === "playing" && !isTouchDevice()) {
                 phaseRef.current = "failed";
                 setPhase("failed");
                 setFailCount((c) => c + 1);
@@ -276,7 +298,56 @@ export default function ScaryMaze() {
         return () => document.removeEventListener("pointerlockchange", onLockChange);
     }, []);
 
+    // ── Touch controls (mobile) ────────────────────────────────────────────────
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
+        const getScale = () => {
+            // The canvas element is visually scaled via CSS max-w/max-h; we need
+            // to convert touch pixel deltas to logical canvas pixel deltas.
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = CW / rect.width;
+            const scaleY = CH / rect.height;
+            return { scaleX, scaleY };
+        };
+
+        const onTouchStart = (e: TouchEvent) => {
+            e.preventDefault();
+            if (phaseRef.current !== "playing") return;
+            const t = e.touches[0];
+            lastTouchRef.current = { x: t.clientX, y: t.clientY };
+        };
+
+        const onTouchMove = (e: TouchEvent) => {
+            e.preventDefault();
+            if (phaseRef.current !== "playing") return;
+            const t = e.touches[0];
+            if (!lastTouchRef.current) {
+                lastTouchRef.current = { x: t.clientX, y: t.clientY };
+                return;
+            }
+            const { scaleX, scaleY } = getScale();
+            const dx = (t.clientX - lastTouchRef.current.x) * scaleX;
+            const dy = (t.clientY - lastTouchRef.current.y) * scaleY;
+            lastTouchRef.current = { x: t.clientX, y: t.clientY };
+            handleMove(dx, dy);
+        };
+
+        const onTouchEnd = () => {
+            lastTouchRef.current = null;
+        };
+
+        canvas.addEventListener("touchstart", onTouchStart, { passive: false });
+        canvas.addEventListener("touchmove", onTouchMove, { passive: false });
+        canvas.addEventListener("touchend", onTouchEnd);
+
+        return () => {
+            canvas.removeEventListener("touchstart", onTouchStart);
+            canvas.removeEventListener("touchmove", onTouchMove);
+            canvas.removeEventListener("touchend", onTouchEnd);
+        };
+    }, [handleMove]);
 
     const handleBegin = () => { ensureAudio(); startLevel(0); };
     // Failure always resets to level 1
@@ -297,23 +368,40 @@ export default function ScaryMaze() {
     const btnBase =
         "border border-[#e63946] bg-transparent text-[#e63946] font-mono font-bold " +
         "tracking-[0.1em] rounded cursor-pointer transition-all duration-200 " +
-        "hover:bg-[#e63946] hover:text-white hover:shadow-[0_0_22px_rgba(230,57,70,0.4)]";
+        "hover:bg-[#e63946] hover:text-white hover:shadow-[0_0_22px_rgba(230,57,70,0.4)] " +
+        "active:bg-[#e63946] active:text-white";
 
     return (
         /* Root */
         <div
-            className="w-screen h-screen flex items-center justify-center antialiased"
+            className="w-screen h-screen flex flex-col items-center justify-center antialiased overflow-hidden"
             style={{ background: "radial-gradient(ellipse at center, #150505 0%, #0a0a0a 65%)" }}
         >
             {/* ── Canvas area ─────────────────────────────────────────────────────── */}
-            <div className="relative" style={{ display: showCanvas ? "block" : "none" }}>
+            <div className="relative flex-shrink-0" style={{ display: showCanvas ? "block" : "none" }}>
                 <canvas
                     ref={canvasRef}
                     width={CW}
                     height={CH}
-                    className="block border-2 border-[#1e1e1e] rounded-[6px] cursor-none max-w-[95vw] max-h-[88vh] w-auto h-auto"
-                    style={{ boxShadow: "0 0 60px rgba(0,0,0,.85), 0 0 3px rgba(230,57,70,0.4)" }}
+                    className="block border-2 border-[#1e1e1e] rounded-[6px] cursor-none"
+                    style={{
+                        boxShadow: "0 0 60px rgba(0,0,0,.85), 0 0 3px rgba(230,57,70,0.4)",
+                        // On mobile fill 98vw; on desktop constrain by both axes
+                        maxWidth: "min(98vw, calc(88vh * 800 / 600))",
+                        width: "100%",
+                        height: "auto",
+                        touchAction: "none",
+                    }}
                 />
+
+                {/* Mobile drag hint — shown while playing */}
+                {phase === "playing" && isTouch && (
+                    <div
+                        className="absolute bottom-2 left-1/2 -translate-x-1/2 font-mono text-[0.6rem] tracking-[0.14em] text-[#555] pointer-events-none select-none"
+                    >
+                        DRAG TO MOVE BALL
+                    </div>
+                )}
 
                 {/* Countdown overlay */}
                 {phase === "countdown" && (
@@ -332,7 +420,7 @@ export default function ScaryMaze() {
                                 {countdown}
                             </div>
                             <p className="text-[0.8rem] text-[#666] tracking-[0.06em]">
-                                Centre your cursor, then get ready…
+                                {isTouch ? "Drag your finger to move the ball…" : "Centre your cursor, then get ready…"}
                             </p>
                         </div>
                     </div>
@@ -341,7 +429,7 @@ export default function ScaryMaze() {
                 {/* Failed overlay */}
                 {phase === "failed" && (
                     <div className={`${overlayBase} bg-[rgba(8,0,0,0.88)] backdrop-blur-[5px] animate-fade-in`}>
-                        <div className="flex flex-col items-center gap-[14px] text-center px-12 py-9">
+                        <div className="flex flex-col items-center gap-[14px] text-center px-6 py-7 sm:px-12 sm:py-9">
                             <span className="text-[48px] animate-shake">💀</span>
                             <h2
                                 className="font-mono font-extrabold tracking-[0.14em] text-[#e63946]"
@@ -373,19 +461,24 @@ export default function ScaryMaze() {
             {/* ── Landing screen ───────────────────────────────────────────────────── */}
             {phase === "landing" && (
                 <div className="flex items-center justify-center w-full h-full animate-fade-in">
-                    <div className="flex flex-col items-center gap-10 text-center">
+                    <div className="flex flex-col items-center gap-8 sm:gap-10 text-center px-4">
                         <h1
                             className="font-mono font-black text-[#e63946] tracking-[0.06em] uppercase animate-pulse-glow"
                             style={{
-                                fontSize: "clamp(3rem,10vw,6rem)",
+                                fontSize: "clamp(2.4rem,10vw,6rem)",
                                 textShadow: "0 0 28px rgba(230,57,70,0.4), 0 0 80px rgba(230,57,70,.18)",
                             }}
                         >
                             FINAL TASK
                         </h1>
+                        {isTouch && (
+                            <p className="font-mono text-[0.72rem] tracking-[0.18em] text-[#555] uppercase max-w-[260px]">
+                                Drag your finger to guide the ball through the maze
+                            </p>
+                        )}
                         <button
                             id="btn-begin"
-                            className={`${btnBase} px-10 py-[13px] text-[1.05rem] tracking-[0.14em]`}
+                            className={`${btnBase} px-8 py-[13px] sm:px-10 text-[1.05rem] tracking-[0.14em]`}
                             onClick={handleBegin}
                         >
                             Play
@@ -393,8 +486,6 @@ export default function ScaryMaze() {
                     </div>
                 </div>
             )}
-
-
 
             {/* ── Jumpscare ────────────────────────────────────────────────────────── */}
             {phase === "scare" && (
