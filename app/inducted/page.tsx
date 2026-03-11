@@ -148,6 +148,36 @@ export default function InductedPage() {
                 <span className="text-red-900">A million memories awaits</span>
             </p>
 
+            <a
+                href="https://chat.whatsapp.com/Fzkl9zymWa3EmsDUNM56by"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    ...fade(4),
+                    display: "inline-block",
+                    marginBottom: 32,
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "#1a1a1a",
+                    border: "1px solid #1a1a1a",
+                    padding: "8px 20px",
+                    fontFamily: "inherit",
+                    textDecoration: "none",
+                    transition: "background 0.2s ease, color 0.2s ease, opacity 0.55s ease, transform 0.55s ease",
+                }}
+                onMouseEnter={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "#1a1a1a";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#f5f4f1";
+                }}
+                onMouseLeave={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#1a1a1a";
+                }}
+            >
+                Join the community
+            </a>
+
             {/* Design team blurb */}
             <div
                 style={{
@@ -213,10 +243,10 @@ export default function InductedPage() {
                         letterSpacing: "0.01em",
                     }}
                 >
-Gear up for this exciting journey filled with movie outs, sleepless nights and stomach aching laughter, stuff that'll make sure you have the most fun in the semesters to come.                </p>
+                    Gear up for this exciting journey filled with movie outs, sleepless nights and stomach aching laughter, stuff that'll make sure you have the most fun in the semesters to come.                </p>
                 <br />
                 <p
-                style={{
+                    style={{
                         margin: 0,
                         fontSize: "0.84rem",
                         color: "#555",
@@ -224,7 +254,7 @@ Gear up for this exciting journey filled with movie outs, sleepless nights and s
                         fontFamily: "inherit",
                         letterSpacing: "0.01em",
                     }}>
-As part of this team, you'll come up with crazy and close to impossible ideas which I'm certain about. But what makes it even better is when everyone say it's not gonna work, or when they tell it's not appealing, we just show them how it's done.                </p>
+                    As part of this team, you'll come up with crazy and close to impossible ideas which I'm certain about. But what makes it even better is when everyone say it's not gonna work, or when they tell it's not appealing, we just show them how it's done.                </p>
                 <br />
 
                 <p
@@ -237,7 +267,7 @@ As part of this team, you'll come up with crazy and close to impossible ideas wh
                         letterSpacing: "0.01em",
                     }}
                 >
-One this day, not only do we start working together but also begin a new family, new memories and what not! 🫂🥂</p>
+                    One this day, not only do we start working together but also begin a new family, new memories and what not! 🫂🥂</p>
                 <br />
                 <p
                     style={{
@@ -249,7 +279,7 @@ One this day, not only do we start working together but also begin a new family,
                         letterSpacing: "0.01em",
                     }}
                 >
-And this moment I swear, WE ARE INFINITE!!!</p>
+                    And this moment I swear, WE ARE INFINITE!!!</p>
 
             </div>
 
