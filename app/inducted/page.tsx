@@ -79,14 +79,14 @@ export default function InductedPage() {
         <div
             style={{
                 width: "100vw",
-                minHeight: "100vh",
+                height: "100vh",
                 background: "#f5f4f1",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 fontFamily: "'NeueMontreal', 'Helvetica Neue', Arial, sans-serif",
-                padding: isMobile ? "48px 20px 56px" : "0 24px",
+                padding: isMobile ? "48px 20px 64px" : "64px 24px 72px",
                 overflowY: "auto",
                 boxSizing: "border-box",
             }}
@@ -148,6 +148,36 @@ export default function InductedPage() {
                 <span className="text-red-900">A million memories awaits</span>
             </p>
 
+            <a
+                href="https://chat.whatsapp.com/Fzkl9zymWa3EmsDUNM56by"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    ...fade(4),
+                    display: "inline-block",
+                    marginBottom: 32,
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "#1a1a1a",
+                    border: "1px solid #1a1a1a",
+                    padding: "8px 20px",
+                    fontFamily: "inherit",
+                    textDecoration: "none",
+                    transition: "background 0.2s ease, color 0.2s ease, opacity 0.55s ease, transform 0.55s ease",
+                }}
+                onMouseEnter={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "#1a1a1a";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#f5f4f1";
+                }}
+                onMouseLeave={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#1a1a1a";
+                }}
+            >
+                Join the community
+            </a>
+
             {/* Design team blurb */}
             <div
                 style={{
@@ -177,7 +207,7 @@ export default function InductedPage() {
                 </p>
                 <p
                     style={{
-                        margin: "0 0 8px",
+                        margin: "0 0 16px",
                         fontSize: "1.05rem",
                         fontWeight: 600,
                         letterSpacing: "0.06em",
@@ -186,48 +216,32 @@ export default function InductedPage() {
                         fontFamily: "inherit",
                     }}
                 >
-                    Design
-                </p>
-                <p
-                    style={{
-                        margin: 0,
-                        fontSize: "0.84rem",
-                        color: "#555",
-                        lineHeight: 1.75,
-                        fontFamily: "inherit",
-                        letterSpacing: "0.01em",
-                    }}
-                >
-                    Congrats on getting into the OT Design team! We are cooks who prepare most of what is served to freshers during and before their arrival, including everything from posts, reels, merch and a lot more.
+                    Content
                 </p>
 
-                <br />
-
-                <p
-                    style={{
-                        margin: 0,
-                        fontSize: "0.84rem",
-                        color: "#555",
-                        lineHeight: 1.75,
-                        fontFamily: "inherit",
-                        letterSpacing: "0.01em",
-                    }}
-                >
-                    But most importantly, we are here to explore create anything and everything that we think is cool and creative.
-                </p>
-                <br />
-                <p
-                style={{
-                        margin: 0,
-                        fontSize: "0.84rem",
-                        color: "#555",
-                        lineHeight: 1.75,
-                        fontFamily: "inherit",
-                        letterSpacing: "0.01em",
-                    }}>
-                     And have fun while doing all that ofc 😜
-                </p>
-
+                {[
+                    "Congratulations. Against all statistical probability and several deeply questionable decisions by the selection committee (mostly me), you have successfully survived the induction process and are now officially part of the Orientation '26 Content Team.",
+                    "Take a moment. Breathe it in. Feel proud.",
+                    "You're now part of the team responsible for shaping a lot of what the incoming batch will see and read during Orientation: the ideas, the words, the tone, the vibe of it all. Which sounds very serious and professional, but in reality will also involve late-night brainstorming, mildly chaotic Google Docs, and confidently naming files things like \u201cfinal_FINAL_v7_this_one_for_sure.\u201d",
+                    "For Orientation, we're basically the people who make sure things sound cool, look cool, and don't read like they were written by a government circular from 1983. So over the next few weeks there'll be brainstorming, writing, editing, last-minute creativity, and the occasional moment where we all stare at a blank document hoping inspiration strikes.",
+                    "But jokes aside, I'm genuinely really excited to work with all of you. We picked a great bunch, and I'm looking forward to the ideas, the chaos, and whatever slightly unhinged but brilliant stuff we end up creating together.",
+                    "To start things off, drop a quick intro: name, department, year, and anything interesting about yourself (fun fact, niche hobby, secret talent, etc.).",
+                    "Welcome to the team. Let the chaos begin.",
+                ].map((para, i) => (
+                    <p
+                        key={i}
+                        style={{
+                            margin: "0 0 12px",
+                            fontSize: "0.84rem",
+                            color: "#555",
+                            lineHeight: 1.8,
+                            fontFamily: "inherit",
+                            letterSpacing: "0.01em",
+                        }}
+                    >
+                        {para}
+                    </p>
+                ))}
             </div>
 
             {/* ── Membership line with slot-machine role ── */}
