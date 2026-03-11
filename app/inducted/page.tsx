@@ -79,15 +79,16 @@ export default function InductedPage() {
         <div
             style={{
                 width: "100vw",
-                minHeight: "100vh",
+                height: "100vh",
                 background: "#f5f4f1",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 fontFamily: "'NeueMontreal', 'Helvetica Neue', Arial, sans-serif",
-                padding: isMobile ? "48px 20px 56px" : "0 24px",
-                overflowY: "auto",
+                padding: isMobile ? "48px 20px 64px" : "64px 24px 72px",
+                overflowY: "scroll",
+                WebkitOverflowScrolling: "touch",
                 boxSizing: "border-box",
             }}
         >
