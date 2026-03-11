@@ -186,7 +186,7 @@ export default function InductedPage() {
                         fontFamily: "inherit",
                     }}
                 >
-                    Design
+                    Events
                 </p>
                 <p
                     style={{
@@ -198,7 +198,7 @@ export default function InductedPage() {
                         letterSpacing: "0.01em",
                     }}
                 >
-                    Congrats on getting into the OT Design team! We are cooks who prepare most of what is served to freshers during and before their arrival, including everything from posts, reels, merch and a lot more.
+                    It's finally time!!! I'm extremely glad to introduce the new squad of Orientation '26 and take this opportunity to welcome each one of you into the 'HEART OF ORIENTATION' ❤️.
                 </p>
 
                 <br />
@@ -213,8 +213,7 @@ export default function InductedPage() {
                         letterSpacing: "0.01em",
                     }}
                 >
-                    But most importantly, we are here to explore create anything and everything that we think is cool and creative.
-                </p>
+Gear up for this exciting journey filled with movie outs, sleepless nights and stomach aching laughter, stuff that'll make sure you have the most fun in the semesters to come.                </p>
                 <br />
                 <p
                 style={{
@@ -225,8 +224,32 @@ export default function InductedPage() {
                         fontFamily: "inherit",
                         letterSpacing: "0.01em",
                     }}>
-                     And have fun while doing all that ofc 😜
-                </p>
+As part of this team, you'll come up with crazy and close to impossible ideas which I'm certain about. But what makes it even better is when everyone say it's not gonna work, or when they tell it's not appealing, we just show them how it's done.                </p>
+                <br />
+
+                <p
+                    style={{
+                        margin: 0,
+                        fontSize: "0.84rem",
+                        color: "#555",
+                        lineHeight: 1.75,
+                        fontFamily: "inherit",
+                        letterSpacing: "0.01em",
+                    }}
+                >
+One this day, not only do we start working together but also begin a new family, new memories and what not! 🫂🥂</p>
+                <br />
+                <p
+                    style={{
+                        margin: 0,
+                        fontSize: "0.84rem",
+                        color: "#555",
+                        lineHeight: 1.75,
+                        fontFamily: "inherit",
+                        letterSpacing: "0.01em",
+                    }}
+                >
+And this moment I swear, WE ARE INFINITE!!!</p>
 
             </div>
 
