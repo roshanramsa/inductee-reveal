@@ -255,7 +255,7 @@ export default function InductedPage() {
                         fontFamily: "inherit",
                         letterSpacing: "0.01em",
                     }}>
-                    As part of this team, you'll come up with crazy and close to impossible ideas which I'm certain about. But what makes it even better is when everyone say it's not gonna work, or when they tell it's not appealing, we just show them how it's done.                </p>
+                    As part of this team, you'll come up with crazy and close to impossible ideas which I'm certain about. But what makes it even better is when everyone says it's not gonna work, or when they tell it's not appealing, we just show them how it's done.                </p>
                 <br />
 
                 <p
@@ -268,7 +268,7 @@ export default function InductedPage() {
                         letterSpacing: "0.01em",
                     }}
                 >
-                    One this day, not only do we start working together but also begin a new family, new memories and what not! 🫂🥂</p>
+                    On this day, not only do we start working together but also begin a new family, new memories and what not! 🫂🥂</p>
                 <br />
                 <p
                     style={{
@@ -280,7 +280,7 @@ export default function InductedPage() {
                         letterSpacing: "0.01em",
                     }}
                 >
-                    And this moment I swear, WE ARE INFINITE!!!</p>
+                    And in this moment I swear, WE ARE INFINITE!!!</p>
 
             </div>
 
