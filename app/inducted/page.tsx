@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const CYCLE_WORDS = ["Events", "Design", "Content", "GLNP", "MANAGER"];
 // Durations (ms) each word is shown before flipping to the next
@@ -79,14 +80,14 @@ export default function InductedPage() {
         <div
             style={{
                 width: "100vw",
-                minHeight: "100vh",
+                height: "100vh",
                 background: "#f5f4f1",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 fontFamily: "'NeueMontreal', 'Helvetica Neue', Arial, sans-serif",
-                padding: isMobile ? "48px 20px 56px" : "0 24px",
+                padding: isMobile ? "48px 20px 64px" : "64px 24px 72px",
                 overflowY: "auto",
                 boxSizing: "border-box",
             }}
@@ -148,6 +149,36 @@ export default function InductedPage() {
                 <span className="text-red-900">A million memories awaits</span>
             </p>
 
+            <a
+                href="https://chat.whatsapp.com/Fzkl9zymWa3EmsDUNM56by"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    ...fade(4),
+                    display: "inline-block",
+                    marginBottom: 32,
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "#1a1a1a",
+                    border: "1px solid #1a1a1a",
+                    padding: "8px 20px",
+                    fontFamily: "inherit",
+                    textDecoration: "none",
+                    transition: "background 0.2s ease, color 0.2s ease, opacity 0.55s ease, transform 0.55s ease",
+                }}
+                onMouseEnter={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "#1a1a1a";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#f5f4f1";
+                }}
+                onMouseLeave={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#1a1a1a";
+                }}
+            >
+                Join the community
+            </a>
+
             {/* Design team blurb */}
             <div
                 style={{
@@ -177,7 +208,7 @@ export default function InductedPage() {
                 </p>
                 <p
                     style={{
-                        margin: "0 0 8px",
+                        margin: "0 0 16px",
                         fontSize: "1.05rem",
                         fontWeight: 600,
                         letterSpacing: "0.06em",
@@ -188,46 +219,39 @@ export default function InductedPage() {
                 >
                     Design
                 </p>
-                <p
-                    style={{
-                        margin: 0,
-                        fontSize: "0.84rem",
-                        color: "#555",
-                        lineHeight: 1.75,
-                        fontFamily: "inherit",
-                        letterSpacing: "0.01em",
-                    }}
-                >
-                    Congrats on getting into the OT Design team! We are cooks who prepare most of what is served to freshers during and before their arrival, including everything from posts, reels, merch and a lot more.
-                </p>
 
-                <br />
+                {[
+                    "Congrats on getting into the OT Design team!",
+                    "We are the people who cook what freshers eat before and during their very first days in the beautiful institute 🥰 ( including this website hehe )",
+                    "Get ready to make anything and everything creative that you've always wanted to try out, and make sure you're prepared for a lotta treats, trips and sleepless nights of making peak while you're at it.",
+                    "The design that we do is for ourselves first and foremost, so we ideate and bring to life whatever the hell we think is cool",
+                    "To another year of being the best design team ever 🍻",
+                ].map((para, i) => (
+                    <p
+                        key={i}
+                        style={{
+                            margin: "0 0 12px",
+                            fontSize: "0.84rem",
+                            color: "#555",
+                            lineHeight: 1.8,
+                            fontFamily: "inherit",
+                            letterSpacing: "0.01em",
+                        }}
+                    >
+                        {para}
+                    </p>
+                ))}
 
-                <p
-                    style={{
-                        margin: 0,
-                        fontSize: "0.84rem",
-                        color: "#555",
-                        lineHeight: 1.75,
-                        fontFamily: "inherit",
-                        letterSpacing: "0.01em",
-                    }}
-                >
-                    But most importantly, we are here to explore create anything and everything that we think is cool and creative.
-                </p>
-                <br />
-                <p
-                style={{
-                        margin: 0,
-                        fontSize: "0.84rem",
-                        color: "#555",
-                        lineHeight: 1.75,
-                        fontFamily: "inherit",
-                        letterSpacing: "0.01em",
-                    }}>
-                     And have fun while doing all that ofc 😜
-                </p>
-
+                <div style={{ marginTop: 16, borderRadius: 2, overflow: "hidden", lineHeight: 0 }}>
+                    <Image
+                        src="/thukuna.webp"
+                        alt="thukuna"
+                        width={440}
+                        height={0}
+                        style={{ width: "100%", height: "auto", display: "block" }}
+                        sizes="(max-width: 640px) 100vw, 440px"
+                    />
+                </div>
             </div>
 
             {/* ── Membership line with slot-machine role ── */}
