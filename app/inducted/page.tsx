@@ -225,7 +225,6 @@ export default function InductedPage() {
                     "You're now part of the team responsible for shaping a lot of what the incoming batch will see and read during Orientation: the ideas, the words, the tone, the vibe of it all. Which sounds very serious and professional, but in reality will also involve late-night brainstorming, mildly chaotic Google Docs, and confidently naming files things like \u201cfinal_FINAL_v7_this_one_for_sure.\u201d",
                     "For Orientation, we're basically the people who make sure things sound cool, look cool, and don't read like they were written by a government circular from 1983. So over the next few weeks there'll be brainstorming, writing, editing, last-minute creativity, and the occasional moment where we all stare at a blank document hoping inspiration strikes.",
                     "But jokes aside, I'm genuinely really excited to work with all of you. We picked a great bunch, and I'm looking forward to the ideas, the chaos, and whatever slightly unhinged but brilliant stuff we end up creating together.",
-                    "To start things off, drop a quick intro: name, department, year, and anything interesting about yourself (fun fact, niche hobby, secret talent, etc.).",
                     "Welcome to the team. Let the chaos begin.",
                 ].map((para, i) => (
                     <p
