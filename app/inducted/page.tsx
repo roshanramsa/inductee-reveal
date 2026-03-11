@@ -79,14 +79,14 @@ export default function InductedPage() {
         <div
             style={{
                 width: "100vw",
-                minHeight: "100vh",
+                height: "100vh",
                 background: "#f5f4f1",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 fontFamily: "'NeueMontreal', 'Helvetica Neue', Arial, sans-serif",
-                padding: isMobile ? "48px 20px 56px" : "0 24px",
+                padding: isMobile ? "48px 20px 64px" : "64px 24px 72px",
                 overflowY: "auto",
                 boxSizing: "border-box",
             }}
@@ -148,7 +148,37 @@ export default function InductedPage() {
                 <span className="text-red-900">A million memories awaits</span>
             </p>
 
-            {/* Design team blurb */}
+            <a
+                href="https://chat.whatsapp.com/Fzkl9zymWa3EmsDUNM56by"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                    ...fade(4),
+                    display: "inline-block",
+                    marginBottom: 32,
+                    fontSize: "0.72rem",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "#1a1a1a",
+                    border: "1px solid #1a1a1a",
+                    padding: "8px 20px",
+                    fontFamily: "inherit",
+                    textDecoration: "none",
+                    transition: "background 0.2s ease, color 0.2s ease, opacity 0.55s ease, transform 0.55s ease",
+                }}
+                onMouseEnter={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "#1a1a1a";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#f5f4f1";
+                }}
+                onMouseLeave={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#1a1a1a";
+                }}
+            >
+                Join the community
+            </a>
+
+            {/* GLnP team blurb */}
             <div
                 style={{
                     ...fade(5),
@@ -177,7 +207,7 @@ export default function InductedPage() {
                 </p>
                 <p
                     style={{
-                        margin: "0 0 8px",
+                        margin: "0 0 16px",
                         fontSize: "1.05rem",
                         fontWeight: 600,
                         letterSpacing: "0.06em",
@@ -186,48 +216,30 @@ export default function InductedPage() {
                         fontFamily: "inherit",
                     }}
                 >
-                    Design
-                </p>
-                <p
-                    style={{
-                        margin: 0,
-                        fontSize: "0.84rem",
-                        color: "#555",
-                        lineHeight: 1.75,
-                        fontFamily: "inherit",
-                        letterSpacing: "0.01em",
-                    }}
-                >
-                    Congrats on getting into the OT Design team! We are cooks who prepare most of what is served to freshers during and before their arrival, including everything from posts, reels, merch and a lot more.
+                    GLnP
                 </p>
 
-                <br />
-
-                <p
-                    style={{
-                        margin: 0,
-                        fontSize: "0.84rem",
-                        color: "#555",
-                        lineHeight: 1.75,
-                        fontFamily: "inherit",
-                        letterSpacing: "0.01em",
-                    }}
-                >
-                    But most importantly, we are here to explore create anything and everything that we think is cool and creative.
-                </p>
-                <br />
-                <p
-                style={{
-                        margin: 0,
-                        fontSize: "0.84rem",
-                        color: "#555",
-                        lineHeight: 1.75,
-                        fontFamily: "inherit",
-                        letterSpacing: "0.01em",
-                    }}>
-                     And have fun while doing all that ofc 😜
-                </p>
-
+                {[
+                    "Welcome to that One Team that sets the levels, that One Term of life that you'll keep forever, that One Tremendous team for OT, GLnP.",
+                    "Now think of GLnP as a person that you know, not a team. It has mixed personalities, and it takes them from you all. You like them, they'll like you back. You live this life with them, they'll give their lives for you.",
+                    "By joining the team, you've officially traded your sleep schedule for calling artists and the chaotic glory of making the impossible happen. You're now the elite squad tasked with convincing famous people to visit us and ensuring the guests don't blow the guests.",
+                    "Expect plenty of Gossip, Lies n Puppets while we wait for the admin to give us a budget. Our plan usually involves Grumpy Lecturers n Puns to keep the front row entertained during technical glitches.",
+                    "And that's why, you deserve to be in GLnP",
+                ].map((para, i) => (
+                    <p
+                        key={i}
+                        style={{
+                            margin: "0 0 12px",
+                            fontSize: "0.84rem",
+                            color: "#555",
+                            lineHeight: 1.8,
+                            fontFamily: "inherit",
+                            letterSpacing: "0.01em",
+                        }}
+                    >
+                        {para}
+                    </p>
+                ))}
             </div>
 
             {/* ── Membership line with slot-machine role ── */}
