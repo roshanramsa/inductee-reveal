@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const CYCLE_WORDS = ["Events", "Design", "Content", "GLNP", "MANAGER"];
 // Durations (ms) each word is shown before flipping to the next
@@ -241,6 +242,17 @@ export default function InductedPage() {
                         {para}
                     </p>
                 ))}
+
+                <div style={{ marginTop: 16, borderRadius: 2, overflow: "hidden", lineHeight: 0 }}>
+                    <Image
+                        src="/content.jpeg"
+                        alt="content team"
+                        width={440}
+                        height={0}
+                        style={{ width: "100%", height: "auto", display: "block" }}
+                        sizes="(max-width: 640px) 100vw, 440px"
+                    />
+                </div>
             </div>
 
             {/* ── Membership line with slot-machine role ── */}
